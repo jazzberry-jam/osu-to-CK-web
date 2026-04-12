@@ -42,77 +42,75 @@ module.require = function(name) {
 	return module.__exports[name]
 }
 </script>
-<script src="curves.js"></script>
-<script src="slidercalc.js"></script>
-<script src="osuparser.js"></script>
-<script src="format.js"></script>
-<script src="osu_to_lua.js"></script>
-
-<script src="jquery.js"></script>
+<script src="Scripts/osuparser.js"></script>
+<script src="Scripts/CKConverter.js"></script>
+<script src="Resources/jquery.js"></script>
 <script>
 $(function(){
   $("#submit").click(function(){
-    $("#out").val("converting...")
+    $("#out").val("Converting...")
 			var osu_file_str = $("#in").val()
 			var options = {
 				"bpm":$("#bpm").val(),
-				"player2":$("#player2").val(),
-				"player1":$("#player1").val(),
-				"speed":$("#speed").val(),
-				"needsvoices":document.getElementById("needsvoices").checked,
-				"song":$("#song").val(),
-				"onlyp1":document.getElementById("onlyp1").checked
+				"song":$("#song").val()
+				// "player2":$("#player2").val(),
+				// "player1":$("#player1").val(),
+				// "speed":$("#speed").val(),
+				// "needsvoices":document.getElementById("needsvoices").checked,
+				// "onlyp1":document.getElementById("onlyp1").checked
 			};
-			$("#out").val(module.require("osu_to_lua")(osu_file_str, options))
+			$("#out").val(module.require("CKConverter")(osu_file_str, options))
   })
 })
 </script>
-<button type="button" class="collapsible active" value="Credits: "><h2>Credits: ∧</h2></button>
-<div class="content" style="display: block;">
-	RobeatsWebConvert2 by spotco - <a href="https://github.com/spotco/RobeatsWebConvert2">Source</a><br/>
-	osu to FNF web by woodyloody (me) - <a href="https://github.com/woodyloody/osu-to-FNF-web">Source</a><br/>
-</div>
+
 <br/>
-<button type="button" class="collapsible" value="Instructions: "><h2>Instructions: ∨</h2></button>
+<h1><tt>osu-to-CK converter</tt></h1>
+<button type="button" class="collapsible" value="Info & Instructions: "><h2>Info & Instructions: ∨</h2></button>
 <div class="content">
-  <p>This tool can used to map FNF songs easier in osu or can be used to just import a song from osu.<br/>
-	  Mapping a song in osu:<br/>
-	  1. Open the song and setup in 8K<br/>
-	  2. Map the right side as player1 and map the left side as player2 with 4 keys for each player<br/>
+  <p>This tool can be used to map Caldera's Keep songs easier in osu!mania or can be used to just import a song from osu!mania. <strong>It is not designed for application outside of development for Tiny Horse Games' upcoming indie title</strong>.<br/>
+	
+	 The CK development team currently does not have an accessible way to make our RhythmPlay charts. This fork allows us to use an existing osu! parser as our RhythmPlay minigame format shares a relatively similar structure as osu!mania.<br/><br/>
+	
+	  <strong>Instructions</strong><br/>
+	  1. Import an .mp3 into osu! and setup the map for osu!mania in 6K.<br/>
+	  2. Map the left 3 lanes as light notes and the right 3 lanes as dark notes.<br/>
 	  3. After mapping the song save and open the .osu beatmap located in the osu!\Songs folder<br/>
 	  4. Copy and paste the contents of the .osu beatmap into the converter<br/>
 	  5. Adjust any options you need to change and convert<br/>
-	  6. Copy the result into the JSON file in FNF which is located in assets\preload\data\(song name)<br/>
-	  7. Test the map in FNF<br/>
-	  If the map is not working make sure you added the correct song name in options which is the same as the folder in assets\songs<br/>
-	  Extra info:<br/>
-	  - The converter can take 4K maps but turn on the only player1 option for it to be mapped the same
+	  6. Copy the result into the JSON file in CK which is located in <tt>Assets/Resources/MusicMinigameCharts</tt>/.<br/>
+	  7. Test the map in CK<br/>
   </p>
 </div>
 <br/>
 <button type="button" class="collapsible active" value="Options: "><h2>Options: ∧</h2></button>
 <div class="content" style="display: block;">
-	Song: <input id="song" type="text" placeholder="Song name"> - The name of the song folder in assets (Defaults to song name in osu file or "songName" if none)<br/>
-	Player1: <input id="player1" type="text" placeholder="Player1"> - Player1's name (Defaults to "bf")<br/>
-	Player2: <input id="player2" type="text" placeholder="Player2"> - Player2's name (Defaults to "dad")<br/>
-	BPM: <input id="bpm" type="text" placeholder="BPM"> - BPM of the song (Defaults to max bpm in osu file or 120 if none)<br/>
-	Speed: <input id="speed" type="text" placeholder="Speed"> - Note approach speed (Defaults to 1)<br/>
-	Needs voices: <input id="needsvoices" type="checkbox" placeholder="needsvoices"> - Does the song have a second file for voices (Defaults to false)<br/>
-	Only player1: <input id="onlyp1" type="checkbox" placeholder="onlyp1"> - All notes on player1's side (Defaults to false)<br/>
+	Song ID: <input id="song" type="text" placeholder="Song name"> - The name of the song as seen in FMOD events (defaults to song name in osu file or "songName" if none)<br/>
+	BPM: <input id="bpm" type="text" placeholder="BPM"> - BPM of the song (defaults to max bpm in osu file or 120 if none)<br/>
+	<!-- Player1: <input id="player1" type="text" placeholder="Player1"> - Player1's name (Defaults to "bf")<br/> -->
+	<!-- Player2: <input id="player2" type="text" placeholder="Player2"> - Player2's name (Defaults to "dad")<br/> -->
+	<!-- Speed: <input id="speed" type="text" placeholder="Speed"> - Note approach speed (Defaults to 1)<br/> -->
+	<!-- Needs voices: <input id="needsvoices" type="checkbox" placeholder="needsvoices"> - Does the song have a second file for voices (Defaults to false)<br/> -->
+	<!-- Only player1: <input id="onlyp1" type="checkbox" placeholder="onlyp1"> - All notes on player1's side (Defaults to false)<br/> -->
 </div>
 <br/>
 <button type="button" class="collapsible active" value="Converter: "><h2>Converter: ∧</h2></button>
 <div class="content" style="display: block;">
-	<textarea id="in" style="width:1000px;height:200px" placeholder="paste contents of osu file here"></textarea>
+	<textarea id="in" style="width:1000px;height:200px" placeholder="Paste contents of osu file here..."></textarea>
 	<br/>
-	<button id="submit">CONVERT</button>
-	<br/>
-	<br/>
+	<button id="submit">Convert</button>
 	<br/>
 	<br/>
-	<textarea id="out" style="width:1000px;height:200px" readonly>output (paste this into the JSON file with the correct name)</textarea>
+	<br/>
+	<br/>
+	<textarea id="out" style="width:1000px;height:200px" readonly placeholder="Copy RhythmPlay chart output here..."></textarea>
 </div>
-
+<button type="button" class="collapsible active" value="Credits: "><h2>Credits: ∧</h2></button>
+<div class="content" style="display: block;">
+	RobeatsWebConvert2 by spotco - <a href="https://github.com/spotco/RobeatsWebConvert2">Source</a><br/>
+	osu-to-FNF-web by woodyloody - <a href="https://github.com/woodyloody/osu-to-FNF-web">Source</a><br/>
+	osu-to-CK-web fork by jazzberry-jam - <a href="https://github.com/jazzberry-jam/osu-to-CK-web">Source</a><br/>
+</div>
 
 <script>
 	var coll = document.getElementsByClassName("collapsible");

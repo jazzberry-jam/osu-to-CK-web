@@ -1,7 +1,5 @@
 'use strict';
 
-var slidercalc = module.require('slidercalc');
-
 function beatmapParser() {
   var beatmap = {
     nbCircles: 0,
@@ -140,10 +138,10 @@ function beatmapParser() {
       startTime:  parseInt(members[2]),
       newCombo:   ((objectType & 4) == 4),
       soundTypes: [],
-      position: [
-        parseInt(members[0]),
-        parseInt(members[1])
-      ]
+      position: new Map([
+        ["x", parseInt(members[0])], 
+        ["y", parseInt(members[1])]
+      ])
     };
 
     /**
@@ -193,7 +191,7 @@ function beatmapParser() {
       hitObject.additions   = parseAdditions(members[10]);
       hitObject.edges       = [];
       hitObject.points      = [
-        [hitObject.position[0], hitObject.position[1]]
+        [hitObject.position.get("x"), hitObject.position.get("y")]
       ];
 
       /**
@@ -207,63 +205,6 @@ function beatmapParser() {
         hitObject.duration = Math.ceil(beatsNumber * timing.beatLength);
         hitObject.endTime  = hitObject.startTime + hitObject.duration;
       }
-      /**
-       * Parse slider points
-       */
-      var points = (members[5] || '').split('|');
-      if (points.length) {
-        hitObject.curveType = curveTypes[points[0]] || 'unknown';
-
-        for (var i = 1, l = points.length; i < l; i++) {
-          var coordinates = points[i].split(':');
-          hitObject.points.push([
-            parseInt(coordinates[0]),
-            parseInt(coordinates[1])
-          ]);
-        }
-      }
-
-      var edgeSounds    = [];
-      var edgeAdditions = [];
-      if (members[8]) { edgeSounds    = members[8].split('|'); }
-      if (members[9]) { edgeAdditions = members[9].split('|'); }
-
-      /**
-       * Get soundTypes and additions for each slider edge
-       */
-      for (var j = 0, lgt = hitObject.repeatCount + 1; j < lgt; j++) {
-        var edge = {
-          soundTypes: [],
-          additions: parseAdditions(edgeAdditions[j])
-        };
-
-        if (edgeSounds[j]) {
-          var sound = edgeSounds[j];
-          if ((sound & 2) == 2)             { edge.soundTypes.push('whistle'); }
-          if ((sound & 4) == 4)             { edge.soundTypes.push('finish');  }
-          if ((sound & 8) == 8)             { edge.soundTypes.push('clap');    }
-          if (edge.soundTypes.length === 0) { edge.soundTypes.push('normal');  }
-        } else {
-          edge.soundTypes.push('normal');
-        }
-
-        hitObject.edges.push(edge);
-      }
-
-      // get coordinates of the slider endpoint
-      var endPoint = slidercalc.getEndPoint(hitObject.curveType, hitObject.pixelLength, hitObject.points);
-      if (endPoint && endPoint[0] && endPoint[1]) {
-        hitObject.endPosition = [
-          Math.round(endPoint[0]),
-          Math.round(endPoint[1])
-        ];
-      } else {
-        // If endPosition could not be calculated, approximate it by setting it to the last point
-        hitObject.endPosition = hitObject.points[hitObject.points.length - 1];
-      }
-    } else {
-      // Unknown
-      hitObject.objectName = 'unknown';
     }
 		
     beatmap.hitObjects.push(hitObject);
@@ -445,7 +386,7 @@ function beatmapParser() {
  * @param  {String|Buffer} content
  * @return {Object} beatmap
  */
-module.export("osuparser", {
+module.export("OsuParser", {
 	parseContent: function (content) {
 	  var parser = beatmapParser();
 	  content.toString().split(/[\n\r]+/).forEach(function (line) {
