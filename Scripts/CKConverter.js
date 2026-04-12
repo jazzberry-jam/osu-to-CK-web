@@ -56,28 +56,28 @@ module.export("CKConverter", function(osu_file_contents, options) {
 	if (options.bpm === "") {
 		options.bpm = beatmap.bpmMax;
 	}
+	
 	options.bpm = parseInt(options.bpm);
+	
 	if (isNaN(options.bpm)) {
 		options.bpm = 120;
 	}
-	if (options.player1 === "") {
-		options.player1 = "bf";
+	
+	if (options.time_signature === "") {
+		options.time_signature = {"numerator":4, "denominator":4};
 	}
-	if (options.player2 === "") {
-		options.player2 = "dad";
-	}
-	if (options.speed === ""){
-		options.speed = 1;
-	}
-	options.speed = parseFloat(options.speed);
-	if (isNaN(options.speed)) {
-		options.speed = 1;
+	else {
+		var time_sig_split = options.time_signature.split("/")
+		options.time_signature = {"numerator":time_sig_split[0], "denominator":time_sig_split[1]};
 	}
 
-	var quarternote  = ((60 / options.bpm) * 1000); // quarter note length in ms
+	var beatUnitInMs = ((60 / options.bpm) * 1000); // beat unit length in ms (denominator)
 	
-	// "resolution": ${placeHolderStr},
-	append_to_output(`{\n\t"songId": "${options.song}",\n\t"bpm": ${options.bpm},\n\t"notes": [`)
+	append_to_output(`{\n\t"songId": "${options.song}",`)
+	append_to_output(`\n\t"bpm": ${options.bpm},`);
+	append_to_output(`\n\t"timeSignature": {\n\t\t"beatsPerBar": ${options.time_signature.numerator},\n\t\t"beatUnit": ${options.time_signature.denominator}\n\t},`)
+	// append_to_output(`\n\t"resolution": 16,`)
+	append_to_output(`\n\t"notes": [`)
 	
 	// Handling of per-note output
 	for (var i = 0; i < beatmap.hitObjects.length; i++) {
@@ -85,7 +85,7 @@ module.export("CKConverter", function(osu_file_contents, options) {
 		else 		{ append_to_output(`,\n\t\t{`); }
 		
 		var currentObj = beatmap.hitObjects[i];
-		var beat = Math.round((currentObj.startTime / quarternote) * 100) / 100;
+		var beat = Math.round((currentObj.startTime / beatUnitInMs) * 100) / 100;
 		var lane = hitobj_x_to_track_number(currentObj.position.get("x"));
 		var noteType = "";
 		var duration = "";
@@ -100,7 +100,7 @@ module.export("CKConverter", function(osu_file_contents, options) {
 		append_to_output(`\n\t\t\t"beat": ${beat},\n\t\t\t"lane": ${lane},\n\t\t\t"noteType": "${noteType}"`);
 		
 		if (noteType == "Hold") {
-			duration = Math.round(((currentObj.endTime / quarternote) - beat ) * 100) / 100;
+			duration = Math.round(((currentObj.endTime / beatUnitInMs) - beat ) * 100) / 100;
 			append_to_output(`,\n\t\t\t"duration": ${duration}`);
 		}
 		

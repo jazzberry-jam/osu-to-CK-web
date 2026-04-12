@@ -52,7 +52,8 @@ $(function(){
 			var osu_file_str = $("#in").val()
 			var options = {
 				"bpm":$("#bpm").val(),
-				"song":$("#song").val()
+				"song":$("#song").val(),
+				"time_signature":$("#time_signature").val()
 				// "player2":$("#player2").val(),
 				// "player1":$("#player1").val(),
 				// "speed":$("#speed").val(),
@@ -87,6 +88,7 @@ $(function(){
 <div class="content" style="display: block;">
 	Song ID: <input id="song" type="text" placeholder="Song name"> - The name of the song as seen in FMOD events (defaults to song name in osu file or "songName" if none)<br/>
 	BPM: <input id="bpm" type="text" placeholder="BPM"> - BPM of the song (defaults to max bpm in osu file or 120 if none)<br/>
+	Time signature: <input id="time_signature" type="text" placeholder="Time signature"> - Time signature of the song (defaults to 4/4)<br/>
 	<!-- Player1: <input id="player1" type="text" placeholder="Player1"> - Player1's name (Defaults to "bf")<br/> -->
 	<!-- Player2: <input id="player2" type="text" placeholder="Player2"> - Player2's name (Defaults to "dad")<br/> -->
 	<!-- Speed: <input id="speed" type="text" placeholder="Speed"> - Note approach speed (Defaults to 1)<br/> -->
