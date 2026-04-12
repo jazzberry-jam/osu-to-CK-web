@@ -1,4 +1,5 @@
-This tool can used to map Caldera's Keep songs easier in osu!mania or can be used to just import a song from osu!mania. It is not designed for application outside of development for Tiny Horse Games' upcoming indie title.<br/>
+This tool can be used to map Caldera's Keep songs easier in osu!mania or can be used to just import a song from osu!mania. It is not designed for application outside of development for Tiny Horse Games' upcoming indie title.<br/>
+
 The CK development team currently does not have an accessible way to make our RhythmPlay charts. This fork allows us to use an existing osu! parser as our RhythmPlay minigame format shares a relatively similar structure as osu!mania.<br/>
 
 ### How to Use
