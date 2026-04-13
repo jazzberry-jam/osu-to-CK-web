@@ -64,7 +64,7 @@ module.export("CKConverter", function(osu_file_contents, options) {
 	}
 	
 	if (options.time_signature === "") {
-		options.time_signature = {"numerator":4, "denominator":4};
+		options.time_signature = {"numerator":beatmap.timingPoints[0].timingSignature, "denominator":4};
 	}
 	else {
 		var time_sig_split = options.time_signature.split("/")
