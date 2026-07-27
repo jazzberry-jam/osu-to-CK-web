@@ -95,8 +95,10 @@ module.export("CKConverter", function (osu_file_contents, options) {
     }
 
     var currentObj = beatmap.hitObjects[i];
+	
+	// console.log(options.time_signature)
 
-    var timeSigNumerator = options.time_signature.split("/")[0];
+    var timeSigNumerator = options.time_signature.numerator;
     var absoluteBeat =
       Math.round((currentObj.startTime / beatUnitInMs) * 100) / 100;
     var beat = Math.floor(absoluteBeat % timeSigNumerator);
